@@ -6,23 +6,26 @@ on:
       - '**.cs'
     types: [synchronize, opened, reopened]
     branches:
-      - 'dev'
-      - 'main'
+      - dev
+      - main
 
 jobs:
-  build:
-
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v2
+      - name: Checkout Source Code
+        uses: actions/checkout@v2
+
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '6.x'
+          dotnet-version: 6.0.x
+          
       - name: Building with dotnet
         working-directory: ./src
         run: dotnet build --configuration Release
+        
       - name: Running tests
         working-directory: ./src
         run: dotnet test
