@@ -20,28 +20,8 @@ jobs:
         with:
           dotnet-version: 6.0.x
 
-      - name: Find .sln files
-        id: find-solution
-        run: |
-          echo "solutions=(find src -path 'src/*/[^/]*.sln' -print0 | xargs -0 echo)" >> "$GITHUB_OUTPUT"
-          
-      - name: Restore Solutions
-        run: |
-          for solution in ${{ steps.find-solutions.outputs.solutions }}; do
-            echo "Restoring solution: $solution"
-            dotnet restore "$solution"
-          done
-            
-      - name: Build Solutions
-        run: |
-          for solution in ${{ steps.find-solutions.outputs.solutions }}; do
-            echo "Building solution: $solution"
-            dotnet build "$solution" --configuration Release
-          done
-            
-      - name: Test Solutions
-        run: |
-          for solution in ${{ steps.find-solutions.outputs.solutions }}; do
-            echo "Testing solution: $solution"
-            dotnet test "$solution" --configuration Release
-          done
+      - name: Build
+        run: dotnet build src/TestApp/TestApp.sln --configuration Release
+
+      - name: Test
+        run: dotnet test src/TestApp/TestApp.sln --configuration Release --no-build
