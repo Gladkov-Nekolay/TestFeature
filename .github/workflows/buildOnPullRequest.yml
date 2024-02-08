@@ -2,8 +2,6 @@ name: Build on PR
 
 on:
   pull_request:
-    paths: 
-      - '**.cs'
     types: [synchronize, opened, reopened]
     branches:
       - dev
