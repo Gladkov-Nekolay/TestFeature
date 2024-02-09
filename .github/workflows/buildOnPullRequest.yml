@@ -20,19 +20,22 @@ jobs:
         with:
           dotnet-version: 6.0.x
 
-      - name: Discover Projects
+      - name: Restore dependencies
         run: |
-          projects=$(find ${{ github.workspace }}/src -type f -name '*.csproj')
-          echo "::set-output name=projects::${projects}"
-
-      - name: Restore Dependencies
-        run: |
-          for project in ${{ steps.DiscoverProjects.outputs.projects }}; do
-            dotnet restore "$project"
+          for file in src/*/*.sln
+          do
+            dotnet restore "$file"
           done
-
-      - name: Build
+  
+      - name: Build solutions
         run: |
-          for project in ${{ steps.DiscoverProjects.outputs.projects }}; do
-            dotnet build "$project" --configuration Release
+          for file in src/*/*.sln
+          do
+            dotnet build "$file"
+          done
+      - name: Run tests
+        run: |
+          for file in src/*/*.sln
+          do
+            dotnet test "$file"
           done
